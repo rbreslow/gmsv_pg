@@ -257,8 +257,8 @@ namespace Lua {
   private:
     static int on(lua_State *state)
     {
-      LUA->CheckType(2, Type::STRING);
-      LUA->CheckType(3, Type::FUNCTION);
+      LUA->CheckType(2, Type::String);
+      LUA->CheckType(3, Type::Function);
 
       auto obj = LuaObject<TType, TChildObject>::Pop(state, 1);
       auto name = LuaValue::Pop(state, 2);
@@ -272,8 +272,8 @@ namespace Lua {
 
     static int once(lua_State *state)
     {
-      LUA->CheckType(2, Type::STRING);
-      LUA->CheckType(3, Type::FUNCTION);
+      LUA->CheckType(2, Type::String);
+      LUA->CheckType(3, Type::Function);
 
       auto obj = LuaObject<TType, TChildObject>::Pop(state, 1);
       auto name = LuaValue::Pop(state, 2);
@@ -287,8 +287,8 @@ namespace Lua {
 
     static int add_listener(lua_State *state)
     {
-      LUA->CheckType(2, Type::STRING);
-      LUA->CheckType(3, Type::FUNCTION);
+      LUA->CheckType(2, Type::String);
+      LUA->CheckType(3, Type::Function);
 
       auto obj = LuaObject<TType, TChildObject>::Pop(state, 1);
       auto name = LuaValue::Pop(state, 2);
@@ -297,7 +297,7 @@ namespace Lua {
       LUA->Push(3);
       int fn_ref = LUA->ReferenceCreate();
 
-      if (LUA->IsType(4, Type::BOOL))
+      if (LUA->IsType(4, Type::Bool))
         once = LUA->GetBool(4);
 
       obj->addListener(state, name, fn_ref, once);

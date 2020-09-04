@@ -1,0 +1,7 @@
+version: "3.8"
+services:
+  build:
+    build: .
+    volumes:
+      - ./:/workdir
+    working_dir: /workdir

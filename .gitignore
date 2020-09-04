@@ -4,3 +4,7 @@ project/
 
 gloo-cppcheck-build-dir/
 gloo.cppcheck
+
+obj/
+Makefile
+*.make

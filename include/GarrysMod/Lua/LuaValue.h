@@ -38,21 +38,21 @@ namespace Lua {
   public:
     int type() const { return _type; }
   public:
-    LuaValue() { _type = Type::NIL; }
+    LuaValue() { _type = Type::Nil; }
 
-    LuaValue(bool_t value) { _type = Type::BOOL; _value = value; }
-    LuaValue(table_t value) { _type = Type::TABLE; _value = value; }
-    LuaValue(number_t value) { _type = Type::NUMBER; _value = value; }
-    LuaValue(string_t value) { _type = Type::STRING; _value = value; }
-    LuaValue(function_t value) { _type = Type::FUNCTION; _value = value; }
-    LuaValue(userdata_t value) { _type = Type::USERDATA; _value = value; }
+    LuaValue(bool_t value) { _type = Type::Bool; _value = value; }
+    LuaValue(table_t value) { _type = Type::Table; _value = value; }
+    LuaValue(number_t value) { _type = Type::Number; _value = value; }
+    LuaValue(string_t value) { _type = Type::String; _value = value; }
+    LuaValue(function_t value) { _type = Type::Function; _value = value; }
+    LuaValue(userdata_t value) { _type = Type::UserData; _value = value; }
     LuaValue(int type, userdata_t value) { _type = type; _value = value; }
 
     LuaValue(const LuaValue &value) { Copy(value); }
 
-    LuaValue(int value) { _type = Type::NUMBER; _value = (number_t)value; }
-    LuaValue(unsigned int value) { _type = Type::NUMBER; _value = (number_t)value; }
-    LuaValue(const char *value) { _type = Type::STRING; _value = std::string(value); }
+    LuaValue(int value) { _type = Type::Number; _value = (number_t)value; }
+    LuaValue(unsigned int value) { _type = Type::Number; _value = (number_t)value; }
+    LuaValue(const char *value) { _type = Type::String; _value = std::string(value); }
   public:
     /**
      * @brief copy lua value from that
@@ -81,7 +81,7 @@ namespace Lua {
      */
     void PushTable(lua_State *state) const
     {
-      if (_type != Type::TABLE)
+      if (_type != Type::Table)
         throw new std::runtime_error("Unable to push type '" + std::string(LUA->GetTypeName(_type)) + "' as table");
 
       // Create table
@@ -107,12 +107,12 @@ namespace Lua {
     {
       switch (_type)
       {
-        case Type::NIL: LUA->PushNil(); break;
-        case Type::TABLE: PushTable(state); break;
-        case Type::NUMBER: LUA->PushNumber(mpark::get<number_t>(_value)); break;
-        case Type::STRING: LUA->PushString(mpark::get<string_t>(_value).c_str()); break;
-        case Type::BOOL: LUA->PushBool(mpark::get<bool_t>(_value)); break;
-        case Type::FUNCTION: LUA->PushCFunction(mpark::get<function_t>(_value)); break;
+        case Type::Nil: LUA->PushNil(); break;
+        case Type::Table: PushTable(state); break;
+        case Type::Number: LUA->PushNumber(mpark::get<number_t>(_value)); break;
+        case Type::String: LUA->PushString(mpark::get<string_t>(_value).c_str()); break;
+        case Type::Bool: LUA->PushBool(mpark::get<bool_t>(_value)); break;
+        case Type::Function: LUA->PushCFunction(mpark::get<function_t>(_value)); break;
         default:
           LUA->PushUserdata(mpark::get<userdata_t>(_value));
           break;
@@ -133,11 +133,11 @@ namespace Lua {
 
       switch (_type)
       {
-        case Type::NIL: return false;
-        case Type::BOOL: return mpark::get<bool_t>(_value) < mpark::get<bool_t>(rhs._value);
-        case Type::NUMBER: return mpark::get<number_t>(_value) < mpark::get<number_t>(rhs._value);
-        case Type::STRING: return mpark::get<string_t>(_value) < mpark::get<string_t>(rhs._value);
-        case Type::FUNCTION: return mpark::get<function_t>(_value) < mpark::get<function_t>(rhs._value);
+        case Type::Nil: return false;
+        case Type::Bool: return mpark::get<bool_t>(_value) < mpark::get<bool_t>(rhs._value);
+        case Type::Number: return mpark::get<number_t>(_value) < mpark::get<number_t>(rhs._value);
+        case Type::String: return mpark::get<string_t>(_value) < mpark::get<string_t>(rhs._value);
+        case Type::Function: return mpark::get<function_t>(_value) < mpark::get<function_t>(rhs._value);
         default: return mpark::get<userdata_t>(_value) < mpark::get<userdata_t>(rhs._value);
       }
     }
@@ -151,19 +151,19 @@ namespace Lua {
 
       switch (_type)
       {
-        case Type::NIL: return true;
-        case Type::BOOL: return mpark::get<bool_t>(_value) == mpark::get<bool_t>(rhs._value);
-        case Type::TABLE: return mpark::get<table_t>(_value) == mpark::get<table_t>(rhs._value);
-        case Type::NUMBER: return mpark::get<number_t>(_value) == mpark::get<number_t>(rhs._value);
-        case Type::STRING: return mpark::get<string_t>(_value) == mpark::get<string_t>(rhs._value);
-        case Type::FUNCTION: return mpark::get<function_t>(_value) == mpark::get<function_t>(rhs._value);
+        case Type::Nil: return true;
+        case Type::Bool: return mpark::get<bool_t>(_value) == mpark::get<bool_t>(rhs._value);
+        case Type::Table: return mpark::get<table_t>(_value) == mpark::get<table_t>(rhs._value);
+        case Type::Number: return mpark::get<number_t>(_value) == mpark::get<number_t>(rhs._value);
+        case Type::String: return mpark::get<string_t>(_value) == mpark::get<string_t>(rhs._value);
+        case Type::Function: return mpark::get<function_t>(_value) == mpark::get<function_t>(rhs._value);
         default: return mpark::get<userdata_t>(_value) == mpark::get<userdata_t>(rhs._value);
       }
     }
     inline bool operator!=(const LuaValue& rhs) const { return !(*this == rhs); }
     inline LuaValue& operator[](LuaValue idx)
     {
-      AssertType(Type::TABLE);
+      AssertType(Type::Table);
       return mpark::get<table_t>(_value)[idx];
     }
 
@@ -203,7 +203,7 @@ namespace Lua {
       auto    table_value = LuaValue(table_t());
       int     type = LUA->GetType(position);
 
-      if (type != Type::TABLE)
+      if (type != Type::Table)
         throw std::runtime_error("Unable to pop type '" + std::string(LUA->GetTypeName(type)) + "' as table");
 
       // Create table ref and push ref to stack
@@ -261,19 +261,19 @@ namespace Lua {
 
       switch (type)
       {
-        case Type::NIL:
+        case Type::Nil:
           return LuaValue();
-        case Type::BOOL:
+        case Type::Bool:
           return LuaValue(LUA->GetBool(position));
-        case Type::TABLE:
+        case Type::Table:
           return PopTable(state, position);
-        case Type::NUMBER:
+        case Type::Number:
           return LuaValue(LUA->GetNumber(position));
-        case Type::STRING:
+        case Type::String:
           return LuaValue(std::string(LUA->GetString(position)));
-        case Type::FUNCTION:
+        case Type::Function:
           return LuaValue(LUA->GetCFunction(position));
-        case Type::USERDATA:
+        case Type::UserData:
           return LuaValue(LUA->GetUserdata(position));
       }
 
@@ -288,17 +288,17 @@ namespace Lua {
     {
       switch (type)
       {
-        case Type::NIL:
+        case Type::Nil:
           return LuaValue();
-        case Type::BOOL:
+        case Type::Bool:
           return LuaValue(false);
-        case Type::TABLE:
+        case Type::Table:
           return LuaValue(table_t());
-        case Type::NUMBER:
+        case Type::Number:
           return LuaValue(0.0);
-        case Type::FUNCTION:
+        case Type::Function:
           return LuaValue(__empty);
-        case Type::USERDATA:
+        case Type::UserData:
           return LuaValue((void*)nullptr);
         default:
           return LuaValue(type, nullptr);

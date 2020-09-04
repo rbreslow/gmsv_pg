@@ -144,7 +144,7 @@ namespace Lua {
       auto name = LuaValue::Pop(state, 2);
 
       // Index getter/method members
-      if (name.type() == Type::STRING) {
+      if (name.type() == Type::String) {
         auto method = obj->_methods.find(name);
         auto getter = obj->_getters.find(name);
 
@@ -163,7 +163,7 @@ namespace Lua {
       auto name = LuaValue::Pop(state, 2);
 
       // Index setter member
-      if (name.type() == Type::STRING) {
+      if (name.type() == Type::String) {
         auto setter = obj->_setters.find(name);
 
         if (setter != obj->_setters.end())
