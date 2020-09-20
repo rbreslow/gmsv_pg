@@ -3,6 +3,11 @@
 set +ex
 
 docker-compose \
+    run --rm --entrypoint conan \
+    build \
+    install . --build=libpqxx
+
+docker-compose \
     run --rm --entrypoint premake5 \
     build \
     --cc=gcc gmake

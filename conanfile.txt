@@ -1,0 +1,5 @@
+[requires]
+libpqxx/7.2.0
+
+[generators]
+premake

@@ -3,5 +3,5 @@ services:
   build:
     build: .
     volumes:
-      - ./:/workdir
-    working_dir: /workdir
+      - ./:/home/conan
+    working_dir: /home/conan

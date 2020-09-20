@@ -1,0 +1,7 @@
+[submodule "vendor/postgres"]
+	path = vendor/postgres
+	url = git@github.com:postgres/postgres.git
+[submodule "vendor/libpqxx"]
+	path = vendor/libpqxx
+	url = git@github.com:jtv/libpqxx.git
+

@@ -3,7 +3,7 @@
 
 #include "interfaces.h"
 #include "query.hpp"
-#include "prepared_query.hpp"
+// #include "prepared_query.hpp"
 
 using namespace GarrysMod::Lua;
 
@@ -26,21 +26,18 @@ public:
     AddGetter("password", get_password);
     AddGetter("port", get_port);
     AddMethod("query", query);
-    AddMethod("query_prepared", query_prepared);
+    // AddMethod("query_prepared", query_prepared);
     AddMethod("connect", connect);
     AddMethod("escape", escape);
     AddMethod("unescape", unescape);
     AddMethod("quote", quote);
     AddMethod("quote_name", quote_name);
-    AddMethod("disconnect", disconnect);
     AddMethod("cancel", cancel);
     AddMethod("protocol_version", protocol_version);
     AddMethod("server_version", server_version);
-    AddMethod("deactivate", deactivate);
-    AddMethod("activate", activate);
     AddMethod("is_open", is_open);
-    AddMethod("prepare", prepare);
-    AddMethod("unprepare", unprepare);
+    // AddMethod("prepare", prepare);
+    // AddMethod("unprepare", unprepare);
     AddMethod("set_encoding", set_encoding);
   }
 
@@ -62,20 +59,20 @@ public:
     return query_obj->Push(state);
   }
 
-  LUA_METHOD(query_prepared) {
-    CHECK_CONNECTION
-    auto name = LuaValue::Pop(state, 2);
+  // LUA_METHOD(query_prepared) {
+  //   CHECK_CONNECTION
+  //   auto name = LuaValue::Pop(state, 2);
 
-    if (name.type() != Type::String) {
-      LUA->ThrowError("pg - prepared query name is invalid\n");
-      return 0;
-    }
+  //   if (name.type() != Type::String) {
+  //     LUA->ThrowError("pg - prepared query name is invalid\n");
+  //     return 0;
+  //   }
 
-    std::shared_ptr<PreparedQuery> query_obj = PreparedQuery::Make(name);
-    query_obj->_set_connection(obj->_connection);
+  //   std::shared_ptr<PreparedQuery> query_obj = PreparedQuery::Make(name);
+  //   query_obj->_set_connection(obj->_connection);
 
-    return query_obj->Push(state);
-  }
+  //   return query_obj->Push(state);
+  // }
 
   LUA_METHOD(connect) {
     auto obj      = Pop(state, 1);
@@ -198,51 +195,6 @@ public:
     return 0;
   }
 
-  LUA_METHOD(disconnect) {
-    CHECK_CONNECTION
-
-    try {
-      obj->_connection->disconnect();
-    } catch (std::exception& e) {
-      LUA->PushBool(false);
-      LUA->PushString(e.what());
-      return 2;
-    }
-
-    LUA->PushBool(true);
-    return 1;
-  }
-
-  LUA_METHOD(activate) {
-    CHECK_CONNECTION
-
-    try {
-      obj->_connection->activate();
-    } catch (std::exception& e) {
-      LUA->PushBool(false);
-      LUA->PushString(e.what());
-      return 2;
-    }
-
-    LUA->PushBool(true);
-    return 1;
-  }
-
-  LUA_METHOD(deactivate) {
-    CHECK_CONNECTION
-
-    try {
-      obj->_connection->deactivate();
-    } catch (std::exception& e) {
-      LUA->PushBool(false);
-      LUA->PushString(e.what());
-      return 2;
-    }
-
-    LUA->PushBool(true);
-    return 1;
-  }
-
   LUA_METHOD(is_open) {
     CHECK_CONNECTION
     LUA->PushBool(obj->_connection->is_open());
@@ -296,23 +248,23 @@ public:
     return 1;
   }
 
-  LUA_METHOD(unprepare) {
-    CHECK_CONNECTION
+  // LUA_METHOD(unprepare) {
+  //   CHECK_CONNECTION
 
-    auto name = LuaValue::Pop(state, 2);
+  //   auto name = LuaValue::Pop(state, 2);
 
-    try {
-      name.AssertType(Type::String);
-      obj->_connection->unprepare(name);
-    } catch (std::exception &e) {
-      LUA->PushBool(false);
-      LUA->PushString(e.what());
-      return 2;
-    }
+  //   try {
+  //     name.AssertType(Type::String);
+  //     obj->_connection->unprepare(name);
+  //   } catch (std::exception &e) {
+  //     LUA->PushBool(false);
+  //     LUA->PushString(e.what());
+  //     return 2;
+  //   }
 
-    LUA->PushBool(true);
-    return 1;
-  }
+  //   LUA->PushBool(true);
+  //   return 1;
+  // }
 
   LUA_METHOD(set_encoding) {
     CHECK_CONNECTION
