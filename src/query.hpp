@@ -86,7 +86,8 @@ public:
                 break;
               case TYPCATEGORY_NUMERIC:
               case TYPCATEGORY_ENUM:
-                row_t.emplace(std::make_pair(col.name(), col.as<double>()));
+                char *ptr;
+                row_t.emplace(std::make_pair(col.name(), strtod(col.c_str(), &ptr)));
                 break;
               case TYPCATEGORY_INVALID:
                 row_t.emplace(std::make_pair(col.name(), LuaValue::Make(Type::Nil)));
